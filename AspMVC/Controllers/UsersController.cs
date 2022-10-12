@@ -24,12 +24,15 @@ namespace AspMVCProject.Controllers
             return View(await _context.Users.ToListAsync());
         }
 
+        public async Task<IActionResult> Find(string email)
+        {
+            return View(await _context.Users.Where(u => u.Email.Contains(email)).ToListAsync());
+        }
+
         // GET: Users/Details/5
         public async Task<IActionResult> Details(int? id)
-        //public async Task<IActionResult> Details(string userid)
         {
-            //int _id;
-            if (id == null) /*|| int.TryParse(userid, out _id)*/
+            if (id == null)
             {
                 return NotFound();
             }
