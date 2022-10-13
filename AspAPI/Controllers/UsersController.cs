@@ -3,6 +3,7 @@ using DataLayer.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace AspAPI.Controllers {
@@ -25,19 +26,41 @@ namespace AspAPI.Controllers {
           .FirstOrDefaultAsync(m => m.Id == id);
       if (user == null)
         return NotFound();
-      return user;
+      return new ObjectResult(user);
     }
 
     [HttpPost]
-    public void Post([FromBody] string value) {
+    public async Task<ActionResult<User>> Post(User user) {
+      if (user == null) {
+        return BadRequest();
+      }
+      dBContext.Users.Add(user);
+      await dBContext.SaveChangesAsync();
+      return Ok(user);
     }
 
     [HttpPut("{id}")]
-    public void Put(int id, [FromBody] string value) {
+    public async Task<ActionResult<User>> Put(User user) {
+      if (user == null) {
+        return BadRequest();
+      }
+      if (!dBContext.Users.Any(x => x.Id == user.Id)) {
+        return NotFound();
+      }
+      dBContext.Update(user);
+      await dBContext.SaveChangesAsync();
+      return Ok(user);
     }
 
     [HttpDelete("{id}")]
-    public void Delete(int id) {
+    public async Task<IActionResult> DeleteConfirmed(int id) {
+      User user = dBContext.Users.FirstOrDefault(x => x.Id == id);
+      if (user == null) {
+        return NotFound();
+      }
+      dBContext.Users.Remove(user);
+      await dBContext.SaveChangesAsync();
+      return Ok(user);
     }
   }
 }

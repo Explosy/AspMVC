@@ -15,9 +15,9 @@ namespace AspMVC {
     public IConfiguration Configuration { get; }
 
     public void ConfigureServices(IServiceCollection services) {
-      services.AddControllersWithViews();
       string connectionString = Configuration.GetConnectionString("DefaultDatabase");
       services.AddDbContext<UsersDBContext>(options => options.UseSqlServer(connectionString));
+      services.AddControllersWithViews();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {

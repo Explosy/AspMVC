@@ -1,20 +1,22 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using AspMVC.Services;
 using DataLayer;
 using DataLayer.Entities;
+using DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace AspMVCProject.Controllers {
   public class UsersController : Controller {
     private readonly UsersDBContext _context;
-
+    private readonly UsersService usersService = new UsersService();
     public UsersController(DbContextOptions<UsersDBContext> options) {
       _context = new UsersDBContext(options);
     }
 
     public async Task<IActionResult> Index() {
-      return View(await _context.Users.ToListAsync());
+      return View(await usersService.GetAllUsers());
     }
 
     public async Task<IActionResult> Find(string email) {
@@ -25,13 +27,10 @@ namespace AspMVCProject.Controllers {
       if (id == null) {
         return NotFound();
       }
-
-      User user = await _context.Users
-          .FirstOrDefaultAsync(m => m.Id == id);
+      UserDTO user = await usersService.GetUser((int)id);
       if (user == null) {
         return NotFound();
       }
-
       return View(user);
     }
 
