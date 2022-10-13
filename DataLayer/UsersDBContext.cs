@@ -11,7 +11,6 @@ namespace DataLayer {
 
     public virtual DbSet<User> Users { get; set; }
 
-
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
       modelBuilder.HasAnnotation("Relational:Collation", "Cyrillic_General_CI_AS");
 

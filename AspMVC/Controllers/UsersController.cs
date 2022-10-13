@@ -1,37 +1,32 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using DataLayer;
-using DataLayer.Entities;
+using AspMVC.Services;
+using DTO;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace AspMVCProject.Controllers {
   public class UsersController : Controller {
-    private readonly UsersDBContext _context;
-
-    public UsersController(DbContextOptions<UsersDBContext> options) {
-      _context = new UsersDBContext(options);
+    private readonly UsersService usersService;
+    public UsersController(UsersService usersService) {
+      this.usersService = usersService;
     }
 
     public async Task<IActionResult> Index() {
-      return View(await _context.Users.ToListAsync());
+      return View(await usersService.GetAllUsers());
     }
 
     public async Task<IActionResult> Find(string email) {
-      return View(await _context.Users.Where(u => u.Email.Contains(email)).ToListAsync());
+      return View(await usersService.FindUsersByEmail(email));
     }
 
     public async Task<IActionResult> Details(int? id) {
       if (id == null) {
         return NotFound();
       }
-
-      User user = await _context.Users
-          .FirstOrDefaultAsync(m => m.Id == id);
+      UserDTO user = await usersService.GetUserById((int)id);
       if (user == null) {
         return NotFound();
       }
-
       return View(user);
     }
 
@@ -41,10 +36,9 @@ namespace AspMVCProject.Controllers {
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,Name,Surname,Age,Email,RegistationDate")] User user) {
+    public async Task<IActionResult> Create([Bind("Id,Name,Surname,Age,Email,RegistationDate")] UserDTO user) {
       if (ModelState.IsValid) {
-        _context.Add(user);
-        await _context.SaveChangesAsync();
+        await usersService.CreateUser(user);
         return RedirectToAction(nameof(Index));
       }
       return View(user);
@@ -54,8 +48,7 @@ namespace AspMVCProject.Controllers {
       if (id == null) {
         return NotFound();
       }
-
-      User user = await _context.Users.FindAsync(id);
+      UserDTO user = await usersService.GetUserById((int)id);
       if (user == null) {
         return NotFound();
       }
@@ -64,22 +57,12 @@ namespace AspMVCProject.Controllers {
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Surname,Age,Email,RegistationDate")] User user) {
+    public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Surname,Age,Email,RegistationDate")] UserDTO user) {
       if (id != user.Id) {
         return NotFound();
       }
-
       if (ModelState.IsValid) {
-        try {
-          _context.Update(user);
-          await _context.SaveChangesAsync();
-        } catch (DbUpdateConcurrencyException) {
-          if (!UserExists(user.Id)) {
-            return NotFound();
-          } else {
-            throw;
-          }
-        }
+        await usersService.UpdateUser(user);
         return RedirectToAction(nameof(Index));
       }
       return View(user);
@@ -89,27 +72,22 @@ namespace AspMVCProject.Controllers {
       if (id == null) {
         return NotFound();
       }
-
-      User user = await _context.Users
-          .FirstOrDefaultAsync(m => m.Id == id);
+      UserDTO user = await usersService.GetUserById((int)id);
       if (user == null) {
         return NotFound();
       }
-
       return View(user);
     }
 
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id) {
-      User user = await _context.Users.FindAsync(id);
-      _context.Users.Remove(user);
-      await _context.SaveChangesAsync();
+      await usersService.DeleteUser(id);
       return RedirectToAction(nameof(Index));
     }
 
-    private bool UserExists(int id) {
-      return _context.Users.Any(e => e.Id == id);
-    }
+    //private bool UserExists(int id) {
+    //  return _context.Users.Any(e => e.Id == id);
+    //}
   }
 }

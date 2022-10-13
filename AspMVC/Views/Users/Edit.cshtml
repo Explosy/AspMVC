@@ -1,4 +1,4 @@
-﻿@model DataLayer.Entities.User
+﻿@model DTO.UserDTO
 
 @{
     ViewData["Title"] = "Edit";
@@ -33,6 +33,7 @@
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
+            <input type="hidden" asp-for="RegistationDate" />
             <div class="form-group">
                 <input type="submit" value="Сохранить" class="btn btn-primary" />
             </div>

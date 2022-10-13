@@ -1,10 +1,10 @@
-﻿@model IEnumerable<DataLayer.Entities.User>
+﻿@model IEnumerable<DTO.UserDTO>
 
 @{
     ViewData["Title"] = "Find";
 }
 <h1>Список всех пользователей</h1>
-<form asp-controller="Users" asp-action="Index"> 
+<form asp-controller="Users" asp-action="Find"> 
     <p>
         Поиск по E-mail: <input type="text" name="email" />
         <input type="submit" value="Поиск" />

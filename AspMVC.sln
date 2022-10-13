@@ -7,10 +7,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataLayer", "DataLayer\Data
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspMVC", "AspMVC\AspMVC.csproj", "{2F32EA08-8D48-476E-9079-802F488EBCB3}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0CB428C0-3C15-4F9D-BD13-5679988FC160}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6EBC0833-37FF-47C1-A5E0-BA3AA13804FB}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspAPI", "AspAPI\AspAPI.csproj", "{2A56DB7D-FBF6-4985-9B0A-1EA9E1277D25}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DTO", "DTO\DTO.csproj", "{D2C5F5BE-6117-4288-82B7-CE2D6CDD013D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +30,14 @@ Global
 		{2F32EA08-8D48-476E-9079-802F488EBCB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F32EA08-8D48-476E-9079-802F488EBCB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F32EA08-8D48-476E-9079-802F488EBCB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A56DB7D-FBF6-4985-9B0A-1EA9E1277D25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A56DB7D-FBF6-4985-9B0A-1EA9E1277D25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A56DB7D-FBF6-4985-9B0A-1EA9E1277D25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A56DB7D-FBF6-4985-9B0A-1EA9E1277D25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2C5F5BE-6117-4288-82B7-CE2D6CDD013D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2C5F5BE-6117-4288-82B7-CE2D6CDD013D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2C5F5BE-6117-4288-82B7-CE2D6CDD013D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2C5F5BE-6117-4288-82B7-CE2D6CDD013D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
