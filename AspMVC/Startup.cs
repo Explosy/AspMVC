@@ -1,3 +1,4 @@
+using AspMVC.Services;
 using DataLayer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -15,8 +16,7 @@ namespace AspMVC {
     public IConfiguration Configuration { get; }
 
     public void ConfigureServices(IServiceCollection services) {
-      string connectionString = Configuration.GetConnectionString("DefaultDatabase");
-      services.AddDbContext<UsersDBContext>(options => options.UseSqlServer(connectionString));
+      services.AddScoped<UsersService>();
       services.AddControllersWithViews();
     }
 

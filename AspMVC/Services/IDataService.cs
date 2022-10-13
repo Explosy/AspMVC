@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 namespace AspMVC.Services {
   interface IDataService {
     Task<IEnumerable<UserDTO>> GetAllUsers();
-    Task<UserDTO> GetUser(int id);
-
+    Task<UserDTO> GetUserById(int id);
+    Task<UserDTO> GetUserByEmail(string email);
+    Task CreateUser(UserDTO userDTO);
+    
   }
 }
