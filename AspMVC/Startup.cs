@@ -17,6 +17,7 @@ namespace AspMVC {
 
     public void ConfigureServices(IServiceCollection services) {
       services.AddScoped<UsersService>();
+      services.AddSingleton<Settings>();
       services.AddControllersWithViews();
     }
 
