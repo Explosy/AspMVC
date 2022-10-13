@@ -8,6 +8,7 @@ namespace AspMVC.Services {
     Task<UserDTO> GetUserById(int id);
     Task<IEnumerable<UserDTO>> FindUsersByEmail(string email);
     Task CreateUser(UserDTO userDTO);
-    
+    Task UpdateUser(UserDTO userDTO);
+    Task DeleteUser(int id);
   }
 }

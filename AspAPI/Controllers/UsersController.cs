@@ -15,14 +15,12 @@ namespace AspAPI.Controllers {
     public UsersController(UsersDBContext dBContext) {
       this.dBContext = dBContext;
     }
+
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<User>>> Get() {
-      return await dBContext.Users.ToListAsync();
+    public async Task<ActionResult<IEnumerable<User>>> Get([FromQuery(Name ="Email")]string email) {
+      if (email == null) return await dBContext.Users.ToListAsync();
+      return await dBContext.Users.Where(u => u.Email.Contains(email)).ToListAsync();
     }
-    //[HttpGet("{email}")]
-    //public async Task<ActionResult<IEnumerable<User>>> Get(string email) {
-    //  return await dBContext.Users.Where(u => u.Email.Contains(email)).ToListAsync();
-    //}
 
     [HttpGet("{id}")]
     public async Task<ActionResult<User>> Get(int id) {
