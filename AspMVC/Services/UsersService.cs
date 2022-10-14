@@ -22,35 +22,35 @@ namespace AspMVC.Services {
       }
     }
     public async Task<IEnumerable<UserDTO>> FindItemsByProperty(string email) {
-      using (HttpClient client = new HttpClient()) {
+      using (IHttpClientProxy client = httpClientProxy()) {
         using HttpResponseMessage response = await client.GetAsync($"{settings.ApiAddress}?Email={email}").ConfigureAwait(false);
         string content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
         return JsonConvert.DeserializeObject<IEnumerable<UserDTO>>(content);
       }
     }
     public async Task<UserDTO> GetItemById(int id) {
-      using (HttpClient client = new HttpClient()) {
+      using (IHttpClientProxy client = httpClientProxy()) {
         using HttpResponseMessage response = await client.GetAsync($"{settings.ApiAddress}{id}").ConfigureAwait(false);
         string content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
         return JsonConvert.DeserializeObject<UserDTO>(content);
       }
     }
     public async Task CreateItem(UserDTO userDTO) {
-      using (HttpClient client = new HttpClient()) {
+      using (IHttpClientProxy client = httpClientProxy()) {
         string json = JsonConvert.SerializeObject(userDTO);
         using HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
         using HttpResponseMessage response = await client.PostAsync(settings.ApiAddress, content).ConfigureAwait(false);
       }
     }
     public async Task UpdateItem(UserDTO userDTO) {
-      using (HttpClient client = new HttpClient()) {
+      using (IHttpClientProxy client = httpClientProxy()) {
         string json = JsonConvert.SerializeObject(userDTO);
         using HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
         using HttpResponseMessage response = await client.PutAsync($"{settings.ApiAddress}{userDTO.Id}", content).ConfigureAwait(false);
       }
     }
     public async Task DeleteItem(int id) {
-      using (HttpClient client = new HttpClient()) {
+      using (IHttpClientProxy client = httpClientProxy()) {
         using HttpResponseMessage response = await client.DeleteAsync($"{settings.ApiAddress}{id}").ConfigureAwait(false);
       }
     }
