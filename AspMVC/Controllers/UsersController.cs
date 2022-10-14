@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AspMVC.Services;
 using DTO;
 using Microsoft.AspNetCore.Mvc;
@@ -11,11 +10,7 @@ namespace AspMVCProject.Controllers {
       this.usersService = usersService;
     }
 
-    public async Task<IActionResult> Index() {
-      return View(await usersService.GetAllItems());
-    }
-
-    public async Task<IActionResult> Find(string email) {
+    public async Task<IActionResult> Index(string email) {
       return View(await usersService.FindItemsByProperty(email));
     }
 
