@@ -12,18 +12,18 @@ namespace AspMVCProject.Controllers {
     }
 
     public async Task<IActionResult> Index() {
-      return View(await usersService.GetAllUsers());
+      return View(await usersService.GetAllItems());
     }
 
     public async Task<IActionResult> Find(string email) {
-      return View(await usersService.FindUsersByEmail(email));
+      return View(await usersService.FindItemsByProperty(email));
     }
 
     public async Task<IActionResult> Details(int? id) {
       if (id == null) {
         return NotFound();
       }
-      UserDTO user = await usersService.GetUserById((int)id);
+      UserDTO user = await usersService.GetItemById((int)id);
       if (user == null) {
         return NotFound();
       }
@@ -38,7 +38,7 @@ namespace AspMVCProject.Controllers {
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("Id,Name,Surname,Age,Email,RegistationDate")] UserDTO user) {
       if (ModelState.IsValid) {
-        await usersService.CreateUser(user);
+        await usersService.CreateItem(user);
         return RedirectToAction(nameof(Index));
       }
       return View(user);
@@ -48,7 +48,7 @@ namespace AspMVCProject.Controllers {
       if (id == null) {
         return NotFound();
       }
-      UserDTO user = await usersService.GetUserById((int)id);
+      UserDTO user = await usersService.GetItemById((int)id);
       if (user == null) {
         return NotFound();
       }
@@ -62,7 +62,7 @@ namespace AspMVCProject.Controllers {
         return NotFound();
       }
       if (ModelState.IsValid) {
-        await usersService.UpdateUser(user);
+        await usersService.UpdateItem(user);
         return RedirectToAction(nameof(Index));
       }
       return View(user);
@@ -72,7 +72,7 @@ namespace AspMVCProject.Controllers {
       if (id == null) {
         return NotFound();
       }
-      UserDTO user = await usersService.GetUserById((int)id);
+      UserDTO user = await usersService.GetItemById((int)id);
       if (user == null) {
         return NotFound();
       }
@@ -82,12 +82,8 @@ namespace AspMVCProject.Controllers {
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id) {
-      await usersService.DeleteUser(id);
+      await usersService.DeleteItem(id);
       return RedirectToAction(nameof(Index));
     }
-
-    //private bool UserExists(int id) {
-    //  return _context.Users.Any(e => e.Id == id);
-    //}
   }
 }
