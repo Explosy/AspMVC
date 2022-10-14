@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
+using System.Net.Http;
 
 namespace AspMVC {
   public class Startup {
@@ -15,7 +17,8 @@ namespace AspMVC {
 
     public void ConfigureServices(IServiceCollection services) {
       services.AddScoped<UsersService>();
-      services.AddSingleton<Settings>();
+      services.AddSingleton<ISettings, Settings>();
+      services.AddSingleton<Func<IHttpClientProxy>>(() => new HttpClientProxy(new HttpClient()));
       services.AddControllersWithViews();
     }
 

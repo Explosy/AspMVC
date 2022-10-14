@@ -18,7 +18,9 @@ namespace AspAPI.Controllers {
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<User>>> Get([FromQuery(Name ="Email")]string email) {
-      if (email == null) return await dBContext.Users.ToListAsync();
+      if (email == null) {
+        return await dBContext.Users.ToListAsync();
+      }
       return await dBContext.Users.Where(u => u.Email.Contains(email)).ToListAsync();
     }
 

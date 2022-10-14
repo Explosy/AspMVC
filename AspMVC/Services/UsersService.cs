@@ -1,5 +1,6 @@
 ﻿using DTO;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
@@ -7,12 +8,14 @@ using System.Threading.Tasks;
 
 namespace AspMVC.Services {
   public class UsersService : IDataService<UserDTO> {
-    private readonly Settings settings;
-    public UsersService(Settings settings) { 
+    private readonly ISettings settings;
+    private readonly Func<IHttpClientProxy> httpClientProxy;
+    public UsersService(ISettings settings, Func<IHttpClientProxy> httpClientProxy) { 
       this.settings = settings;
+      this.httpClientProxy = httpClientProxy;
     }
     public async Task<IEnumerable<UserDTO>> GetAllItems() {
-      using (HttpClient client = new HttpClient()) {
+      using (IHttpClientProxy client = httpClientProxy()) {
         using HttpResponseMessage response = await client.GetAsync(settings.ApiAddress).ConfigureAwait(false);
         string content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
         return JsonConvert.DeserializeObject<IEnumerable<UserDTO>>(content);

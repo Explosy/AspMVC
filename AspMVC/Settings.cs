@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 
 namespace AspMVC {
-  public class Settings {
+  public class Settings : ISettings {
     IConfiguration config { get; set; }
     public Settings(IConfiguration config) {
       this.config = config;
