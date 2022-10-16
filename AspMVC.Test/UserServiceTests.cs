@@ -64,40 +64,19 @@ namespace AspMVC.Test {
         });
       httpClientProxyMoq.Setup(client => client.Dispose());
       
-      UserDTO user = usersService.GetItemById(id).GetAwaiter().GetResult();
-      Assert.True(TestUser.Equals(user));
-    }
+      UserDTO user = usersService.GetItemById(id).GetAwaiter().GetResult();  
 
-    [Test]
-    public void FindItemsByProperty() {
-      string email = "E-mail2";
-      settingsMoq.SetupGet(setting => setting.ApiAddress).Returns("test");
-      httpClientProxyMoq.Setup(client => client.GetAsync($"test?Email={email}"))
-        .Returns(() => {
-          Task<HttpResponseMessage> task = new Task<HttpResponseMessage>(() => new HttpResponseMessage() {
-            Content = new StringContent(TestResource.ExpectedFindContent, Encoding.UTF8, "application/json")
-          });
-          task.Start();
-          return task;
-        });
-      httpClientProxyMoq.Setup(client => client.Dispose());
-
-      IEnumerable<UserDTO> users = usersService.FindItemsByProperty(email).GetAwaiter().GetResult();
-      Assert.True(TestUser.Equals(users.First()));
+      Assert.AreEqual(TestUser.Id, user.Id);
+      Assert.AreEqual(TestUser.Name, user.Name);
+      Assert.AreEqual(TestUser.Surname, user.Surname);
+      Assert.AreEqual(TestUser.Age, user.Age);
+      Assert.AreEqual(TestUser.Id, user.Id);
+      Assert.AreEqual(TestUser.Email, user.Email);
+      Assert.AreEqual(TestUser.RegistationDate, user.RegistationDate);
     }
 
     [Test]
     public void CreateUser() {
-      usersService.CreateItem(TestUser).GetAwaiter().GetResult();
-    }
-
-    [Test]
-    public void UpdateUser() {
-      usersService.CreateItem(TestUser).GetAwaiter().GetResult();
-    }
-
-    [Test]
-    public void DeleteUser() {
       usersService.CreateItem(TestUser).GetAwaiter().GetResult();
     }
   }

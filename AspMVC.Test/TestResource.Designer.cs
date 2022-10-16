@@ -61,11 +61,11 @@ namespace AspMVC.Test {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на [{&quot;id&quot;:2,&quot;name&quot;:&quot;Andrey&quot;,&quot;surname&quot;:&quot;Kopilov&quot;,&quot;age&quot;:28,&quot;email&quot;:&quot;E-mail2&quot;,&quot;registationDate&quot;:&quot;2022-10-12T00:00:00&quot;}].
+        ///   Ищет локализованную строку, похожую на {&quot;id&quot;:2,&quot;name&quot;:&quot;Andrey&quot;,&quot;surname&quot;:&quot;Kopilov&quot;,&quot;age&quot;:28,&quot;email&quot;:&quot;E-mail2&quot;,&quot;registationDate&quot;:&quot;2022-10-12T00:00:00&quot;}.
         /// </summary>
-        internal static string ExpectedFindContent {
+        internal static string ExpectedCreateContent {
             get {
-                return ResourceManager.GetString("ExpectedFindContent", resourceCulture);
+                return ResourceManager.GetString("ExpectedCreateContent", resourceCulture);
             }
         }
         
