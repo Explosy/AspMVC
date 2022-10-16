@@ -35,11 +35,15 @@ namespace AspMVC.Services {
         return JsonConvert.DeserializeObject<UserDTO>(content);
       }
     }
-    public async Task CreateItem(UserDTO userDTO) {
+    public async Task<bool> CreateItem(UserDTO userDTO) {
       using (IHttpClientProxy client = httpClientProxy()) {
         string json = JsonConvert.SerializeObject(userDTO);
         using HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
         using HttpResponseMessage response = await client.PostAsync(settings.ApiAddress, content).ConfigureAwait(false);
+        if (response.IsSuccessStatusCode) {
+          return true;
+        }
+        return false;
       }
     }
     public async Task UpdateItem(UserDTO userDTO) {

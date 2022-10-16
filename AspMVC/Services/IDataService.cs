@@ -7,7 +7,7 @@ namespace AspMVC.Services {
     Task<IEnumerable<T>> GetAllItems();
     Task<T> GetItemById(int id);
     Task<IEnumerable<T>> FindItemsByProperty(string email);
-    Task CreateItem(T item);
+    Task<bool> CreateItem(T item);
     Task UpdateItem(T item);
     Task DeleteItem(int id);
   }

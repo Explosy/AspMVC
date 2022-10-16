@@ -33,8 +33,11 @@ namespace AspMVCProject.Controllers {
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("Id,Name,Surname,Age,Email,RegistationDate")] UserDTO user) {
       if (ModelState.IsValid) {
-        await usersService.CreateItem(user);
-        return RedirectToAction(nameof(Index));
+        bool result = await usersService.CreateItem(user);
+        if (result) {
+          return View("Success");
+        }
+        return View("Failure");
       }
       return View(user);
     }

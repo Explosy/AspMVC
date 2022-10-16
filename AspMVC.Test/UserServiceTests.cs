@@ -98,7 +98,17 @@ namespace AspMVC.Test {
 
     [Test]
     public void DeleteUser() {
-      usersService.CreateItem(TestUser).GetAwaiter().GetResult();
+      int id = 2;
+      settingsMoq.SetupGet(setting => setting.ApiAddress).Returns("test");
+      httpClientProxyMoq.Setup(client => client.GetAsync($"test{id}"))
+        .Returns(() => {
+          Task<HttpResponseMessage> task = new Task<HttpResponseMessage>(() => new HttpResponseMessage() {
+            Content = new StringContent(TestResource.UserServiceGetItemResult, Encoding.UTF8, "application/json")
+          });
+          task.Start();
+          return task;
+        });
+      httpClientProxyMoq.Setup(client => client.Dispose());
     }
   }
 }
