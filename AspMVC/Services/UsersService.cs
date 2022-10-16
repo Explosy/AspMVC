@@ -46,16 +46,24 @@ namespace AspMVC.Services {
         return false;
       }
     }
-    public async Task UpdateItem(UserDTO userDTO) {
+    public async Task<bool> UpdateItem(UserDTO userDTO) {
       using (IHttpClientProxy client = httpClientProxy()) {
         string json = JsonConvert.SerializeObject(userDTO);
         using HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
         using HttpResponseMessage response = await client.PutAsync($"{settings.ApiAddress}{userDTO.Id}", content).ConfigureAwait(false);
+        if (response.IsSuccessStatusCode) {
+          return true;
+        }
+        return false;
       }
     }
-    public async Task DeleteItem(int id) {
+    public async Task<bool> DeleteItem(int id) {
       using (IHttpClientProxy client = httpClientProxy()) {
         using HttpResponseMessage response = await client.DeleteAsync($"{settings.ApiAddress}{id}").ConfigureAwait(false);
+        if (response.IsSuccessStatusCode) {
+          return true;
+        }
+        return false;
       }
     }
   }

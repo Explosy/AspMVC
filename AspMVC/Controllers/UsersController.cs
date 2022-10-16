@@ -35,8 +35,10 @@ namespace AspMVCProject.Controllers {
       if (ModelState.IsValid) {
         bool result = await usersService.CreateItem(user);
         if (result) {
+          ViewBag.Message = "добавлен";
           return View("Success");
         }
+        ViewBag.Message = "Добавление";
         return View("Failure");
       }
       return View(user);
@@ -60,8 +62,13 @@ namespace AspMVCProject.Controllers {
         return NotFound();
       }
       if (ModelState.IsValid) {
-        await usersService.UpdateItem(user);
-        return RedirectToAction(nameof(Index));
+        bool result = await usersService.UpdateItem(user);
+        if (result) {
+          ViewBag.Message = "изменен";
+          return View("Success");
+        }
+        ViewBag.Message = "Изменение";
+        return View("Failure");
       }
       return View(user);
     }
@@ -80,8 +87,13 @@ namespace AspMVCProject.Controllers {
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id) {
-      await usersService.DeleteItem(id);
-      return RedirectToAction(nameof(Index));
+      bool result = await usersService.DeleteItem(id);
+      if (result) {
+        ViewBag.Message = "удален";
+        return View("Success");
+      }
+      ViewBag.Message = "Удаление";
+      return View("Failure");
     }
   }
 }
