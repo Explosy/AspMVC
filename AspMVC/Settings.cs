@@ -6,7 +6,8 @@ namespace AspMVC {
     public Settings(IConfiguration config) {
       this.config = config;
     }
-    public string ApiAddress { get {
+    public string ApiAddress { 
+      get {
         return config.GetValue<string>("ApiAddress");
       } 
     }

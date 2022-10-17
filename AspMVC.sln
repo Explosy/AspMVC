@@ -16,7 +16,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspAPI", "AspAPI\AspAPI.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DTO", "DTO\DTO.csproj", "{D2C5F5BE-6117-4288-82B7-CE2D6CDD013D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspMVC.Test", "AspMVC.Test\AspMVC.Test.csproj", "{BB282D6D-36A7-40BC-A6F3-11EBDE2641A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspMVC.Test", "AspMVC.Test\AspMVC.Test.csproj", "{BB282D6D-36A7-40BC-A6F3-11EBDE2641A9}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "vueapp", "VueApp\vueapp.esproj", "{BD014C02-4A03-4EA8-AF50-F94022E5D378}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +46,12 @@ Global
 		{BB282D6D-36A7-40BC-A6F3-11EBDE2641A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB282D6D-36A7-40BC-A6F3-11EBDE2641A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB282D6D-36A7-40BC-A6F3-11EBDE2641A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD014C02-4A03-4EA8-AF50-F94022E5D378}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD014C02-4A03-4EA8-AF50-F94022E5D378}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD014C02-4A03-4EA8-AF50-F94022E5D378}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{BD014C02-4A03-4EA8-AF50-F94022E5D378}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD014C02-4A03-4EA8-AF50-F94022E5D378}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD014C02-4A03-4EA8-AF50-F94022E5D378}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

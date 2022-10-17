@@ -1,15 +1,12 @@
 using AspMVC.Services;
 using DTO;
-using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,14 +16,14 @@ namespace AspMVC.Test {
     private Mock<ISettings> settingsMoq;
     private Mock<IHttpClientProxy> httpClientProxyMoq;
     private Mock<IHttpContentProxy> httpContentProxyMoq;
-    private UserDTO TestUser;
+    private UserDTO testUser;
     [SetUp]
     public void Setup() {
       settingsMoq = new Mock<ISettings>(MockBehavior.Strict);
       httpClientProxyMoq = new Mock<IHttpClientProxy>(MockBehavior.Strict);
       httpContentProxyMoq = new Mock<IHttpContentProxy>(MockBehavior.Strict);
       usersService = new UsersService(settingsMoq.Object, () => httpClientProxyMoq.Object, (string json) => httpContentProxyMoq.Object );
-      TestUser = new UserDTO() {
+      testUser = new UserDTO() {
         Id = 2,
         Name = "Andrey",
         Surname = "Kopilov",
@@ -70,7 +67,7 @@ namespace AspMVC.Test {
       
       UserDTO user = usersService.GetItemById(id).GetAwaiter().GetResult();
       
-      Assert.True(TestUser.Equals(user));
+      Assert.True(testUser.Equals(user));
     }
 
     [Test]
@@ -89,7 +86,7 @@ namespace AspMVC.Test {
       
       IEnumerable<UserDTO> users = usersService.FindItemsByProperty(email).GetAwaiter().GetResult();
       
-      Assert.True(TestUser.Equals(users.First()));
+      Assert.True(testUser.Equals(users.First()));
     }
 
     [Test]
@@ -108,7 +105,7 @@ namespace AspMVC.Test {
           return task;
         });
       
-      bool result = usersService.CreateItem(TestUser).GetAwaiter().GetResult();
+      bool result = usersService.CreateItem(testUser).GetAwaiter().GetResult();
 
       Assert.True(result);
 
@@ -121,7 +118,7 @@ namespace AspMVC.Test {
           return task;
         });
 
-      result = usersService.CreateItem(TestUser).GetAwaiter().GetResult();
+      result = usersService.CreateItem(testUser).GetAwaiter().GetResult();
 
       Assert.False(result);
     }
@@ -131,7 +128,7 @@ namespace AspMVC.Test {
       settingsMoq.SetupGet(setting => setting.ApiAddress).Returns("test");
       httpContentProxyMoq.Setup(client => client.Dispose());
       httpClientProxyMoq.Setup(client => client.Dispose());
-      httpClientProxyMoq.Setup(client => client.PutAsync($"test{TestUser.Id}", httpContentProxyMoq.Object))
+      httpClientProxyMoq.Setup(client => client.PutAsync($"test{testUser.Id}", httpContentProxyMoq.Object))
         .Returns(() => {
           Task<HttpResponseMessage> task = new Task<HttpResponseMessage>(() => new HttpResponseMessage() {
             StatusCode = HttpStatusCode.OK
@@ -139,11 +136,11 @@ namespace AspMVC.Test {
           task.Start();
           return task;
         });
-      bool result = usersService.UpdateItem(TestUser).GetAwaiter().GetResult();
+      bool result = usersService.UpdateItem(testUser).GetAwaiter().GetResult();
 
       Assert.True(result);
 
-      httpClientProxyMoq.Setup(client => client.PutAsync($"test{TestUser.Id}", httpContentProxyMoq.Object))
+      httpClientProxyMoq.Setup(client => client.PutAsync($"test{testUser.Id}", httpContentProxyMoq.Object))
         .Returns(() => {
           Task<HttpResponseMessage> task = new Task<HttpResponseMessage>(() => new HttpResponseMessage() {
             StatusCode = HttpStatusCode.BadRequest
@@ -151,7 +148,7 @@ namespace AspMVC.Test {
           task.Start();
           return task;
         });
-      result = usersService.UpdateItem(TestUser).GetAwaiter().GetResult();
+      result = usersService.UpdateItem(testUser).GetAwaiter().GetResult();
 
       Assert.False(result);
     }

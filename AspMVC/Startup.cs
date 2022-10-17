@@ -19,7 +19,7 @@ namespace AspMVC {
       services.AddScoped<UsersService>();
       services.AddSingleton<ISettings, Settings>();
       services.AddSingleton<Func<IHttpClientProxy>>(() => new HttpClientProxy(new HttpClient()));
-      services.AddSingleton<Func<string,IHttpContentProxy>>((string json) => new HttpContentProxy(json));//
+      services.AddSingleton<Func<string,IHttpContentProxy>>((string json) => new HttpContentProxy(json));
       services.AddControllersWithViews();
     }
 

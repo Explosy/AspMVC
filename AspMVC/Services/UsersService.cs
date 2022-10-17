@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace AspMVC.Services {
@@ -41,7 +40,6 @@ namespace AspMVC.Services {
       using (IHttpClientProxy client = httpClientProxy()) {
         string json = JsonConvert.SerializeObject(userDTO);
         using IHttpContentProxy content = httpContentProxy(json);
-        //using HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
         using HttpResponseMessage response = await client.PostAsync(settings.ApiAddress, content).ConfigureAwait(false);
         if (response.IsSuccessStatusCode) {
           return true;

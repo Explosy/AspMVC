@@ -28,8 +28,9 @@ namespace AspAPI.Controllers {
     public async Task<ActionResult<User>> Get(int id) {
       User user = await dBContext.Users
           .FirstOrDefaultAsync(m => m.Id == id);
-      if (user == null)
+      if (user == null) {
         return NotFound();
+      } 
       return new ObjectResult(user);
     }
 

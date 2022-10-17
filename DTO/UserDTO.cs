@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
-using System.Xml.Linq;
+
 
 namespace DTO {
   public class UserDTO {
@@ -24,17 +22,17 @@ namespace DTO {
     public DateTime? RegistationDate { get; set; }
 
     public override bool Equals(object obj) {
-      if ((obj is null) && (this.GetType() != obj.GetType())) {
+      if ((obj is null) && (GetType() != obj.GetType())) {
         return false;
       }
       else {
         UserDTO userDTO = obj as UserDTO;
-        if ((this.Id.Equals(userDTO.Id)) &&
-          (this.Name.Equals(userDTO.Name)) &&
-          (this.Surname.Equals(userDTO.Surname))&&
-          (this.Age.Equals(userDTO.Age)) &&
-          (this.Email.Equals(userDTO.Email))&&
-          (this.RegistationDate.Equals(userDTO.RegistationDate))){
+        if (Id.Equals(userDTO.Id) &&
+          Name.Equals(userDTO.Name) &&
+          Surname.Equals(userDTO.Surname)&&
+          Age.Equals(userDTO.Age) &&
+          Email.Equals(userDTO.Email)&&
+          RegistationDate.Equals(userDTO.RegistationDate)){
           return true;
         }
         return false;
