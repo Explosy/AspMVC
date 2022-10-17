@@ -1,5 +1,6 @@
 using AspMVC.Services;
 using DTO;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using System;
@@ -8,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,12 +18,14 @@ namespace AspMVC.Test {
     private UsersService usersService;
     private Mock<ISettings> settingsMoq;
     private Mock<IHttpClientProxy> httpClientProxyMoq;
+    private Mock<IHttpContentProxy> httpContentProxyMoq;
     private UserDTO TestUser;
     [SetUp]
     public void Setup() {
       settingsMoq = new Mock<ISettings>(MockBehavior.Strict);
       httpClientProxyMoq = new Mock<IHttpClientProxy>(MockBehavior.Strict);
-      usersService = new UsersService(settingsMoq.Object, () => httpClientProxyMoq.Object);
+      httpContentProxyMoq = new Mock<IHttpContentProxy>(MockBehavior.Strict);
+      usersService = new UsersService(settingsMoq.Object, () => httpClientProxyMoq.Object, (string json) => httpContentProxyMoq.Object );
       TestUser = new UserDTO() {
         Id = 2,
         Name = "Andrey",
@@ -54,6 +58,7 @@ namespace AspMVC.Test {
     public void GetItemById() {
       int id = 2;
       settingsMoq.SetupGet(setting => setting.ApiAddress).Returns("test");
+      httpClientProxyMoq.Setup(client => client.Dispose());
       httpClientProxyMoq.Setup(client => client.GetAsync($"test{id}"))
         .Returns(() => {
           Task<HttpResponseMessage> task = new Task<HttpResponseMessage>(() => new HttpResponseMessage() {
@@ -62,9 +67,9 @@ namespace AspMVC.Test {
           task.Start();
           return task;
         });
-      httpClientProxyMoq.Setup(client => client.Dispose());
       
       UserDTO user = usersService.GetItemById(id).GetAwaiter().GetResult();
+      
       Assert.True(TestUser.Equals(user));
     }
 
@@ -72,6 +77,7 @@ namespace AspMVC.Test {
     public void FindItemsByProperty() {
       string email = "E-mail2";
       settingsMoq.SetupGet(setting => setting.ApiAddress).Returns("test");
+      httpClientProxyMoq.Setup(client => client.Dispose());
       httpClientProxyMoq.Setup(client => client.GetAsync($"test?Email={email}"))
         .Returns(() => {
           Task<HttpResponseMessage> task = new Task<HttpResponseMessage>(() => new HttpResponseMessage() {
@@ -80,35 +86,106 @@ namespace AspMVC.Test {
           task.Start();
           return task;
         });
-      httpClientProxyMoq.Setup(client => client.Dispose());
-
+      
       IEnumerable<UserDTO> users = usersService.FindItemsByProperty(email).GetAwaiter().GetResult();
+      
       Assert.True(TestUser.Equals(users.First()));
     }
 
     [Test]
     public void CreateUser() {
-      usersService.CreateItem(TestUser).GetAwaiter().GetResult();
+
+      StringContent content = new StringContent(TestResource.UpdateContent, Encoding.UTF8, "application/json");
+      settingsMoq.SetupGet(setting => setting.ApiAddress).Returns("test");
+      httpContentProxyMoq.Setup(client => client.Dispose());
+      httpClientProxyMoq.Setup(client => client.Dispose());
+      httpClientProxyMoq.Setup(client => client.PostAsync($"test", httpContentProxyMoq.Object))
+        .Returns(() => {
+          Task<HttpResponseMessage> task = new Task<HttpResponseMessage>(() => new HttpResponseMessage() {
+            StatusCode = HttpStatusCode.OK
+          });
+          task.Start();
+          return task;
+        });
+      
+      bool result = usersService.CreateItem(TestUser).GetAwaiter().GetResult();
+
+      Assert.True(result);
+
+      httpClientProxyMoq.Setup(client => client.PostAsync($"test", httpContentProxyMoq.Object))
+        .Returns(() => {
+          Task<HttpResponseMessage> task = new Task<HttpResponseMessage>(() => new HttpResponseMessage() {
+            StatusCode = HttpStatusCode.BadRequest
+          });
+          task.Start();
+          return task;
+        });
+
+      result = usersService.CreateItem(TestUser).GetAwaiter().GetResult();
+
+      Assert.False(result);
     }
 
     [Test]
     public void UpdateUser() {
-      usersService.CreateItem(TestUser).GetAwaiter().GetResult();
+      settingsMoq.SetupGet(setting => setting.ApiAddress).Returns("test");
+      httpContentProxyMoq.Setup(client => client.Dispose());
+      httpClientProxyMoq.Setup(client => client.Dispose());
+      httpClientProxyMoq.Setup(client => client.PutAsync($"test{TestUser.Id}", httpContentProxyMoq.Object))
+        .Returns(() => {
+          Task<HttpResponseMessage> task = new Task<HttpResponseMessage>(() => new HttpResponseMessage() {
+            StatusCode = HttpStatusCode.OK
+          });
+          task.Start();
+          return task;
+        });
+      bool result = usersService.UpdateItem(TestUser).GetAwaiter().GetResult();
+
+      Assert.True(result);
+
+      httpClientProxyMoq.Setup(client => client.PutAsync($"test{TestUser.Id}", httpContentProxyMoq.Object))
+        .Returns(() => {
+          Task<HttpResponseMessage> task = new Task<HttpResponseMessage>(() => new HttpResponseMessage() {
+            StatusCode = HttpStatusCode.BadRequest
+          });
+          task.Start();
+          return task;
+        });
+      result = usersService.UpdateItem(TestUser).GetAwaiter().GetResult();
+
+      Assert.False(result);
     }
 
     [Test]
     public void DeleteUser() {
       int id = 2;
       settingsMoq.SetupGet(setting => setting.ApiAddress).Returns("test");
-      httpClientProxyMoq.Setup(client => client.GetAsync($"test{id}"))
+      httpClientProxyMoq.Setup(client => client.Dispose());
+      httpClientProxyMoq.Setup(client => client.DeleteAsync($"test{id}"))
         .Returns(() => {
           Task<HttpResponseMessage> task = new Task<HttpResponseMessage>(() => new HttpResponseMessage() {
-            Content = new StringContent(TestResource.UserServiceGetItemResult, Encoding.UTF8, "application/json")
+            StatusCode = HttpStatusCode.OK
           });
           task.Start();
           return task;
         });
-      httpClientProxyMoq.Setup(client => client.Dispose());
+      
+      bool result = usersService.DeleteItem(id).GetAwaiter().GetResult();
+
+      Assert.True(result);
+
+      httpClientProxyMoq.Setup(client => client.DeleteAsync($"test{id}"))
+        .Returns(() => {
+          Task<HttpResponseMessage> task = new Task<HttpResponseMessage>(() => new HttpResponseMessage() {
+            StatusCode = HttpStatusCode.NotFound
+          });
+          task.Start();
+          return task;
+        });
+
+      result = usersService.DeleteItem(id).GetAwaiter().GetResult();
+
+      Assert.False(result);
     }
   }
 }

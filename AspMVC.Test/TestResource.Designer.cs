@@ -70,6 +70,15 @@ namespace AspMVC.Test {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на {&quot;id&quot;:2,&quot;name&quot;:&quot;Andrey&quot;,&quot;surname&quot;:&quot;Kopilov&quot;,&quot;age&quot;:28,&quot;email&quot;:&quot;E-mail2&quot;,&quot;registationDate&quot;:&quot;2022-10-12T00:00:00&quot;}.
+        /// </summary>
+        internal static string UpdateContent {
+            get {
+                return ResourceManager.GetString("UpdateContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на [{&quot;id&quot;:2,&quot;name&quot;:&quot;Andrey&quot;,&quot;surname&quot;:&quot;Kopilov&quot;,&quot;age&quot;:29,&quot;email&quot;:&quot;E-mail2&quot;,&quot;registationDate&quot;:&quot;2022-10-12T00:00:00&quot;},{&quot;id&quot;:3,&quot;name&quot;:&quot;Konstantin&quot;,&quot;surname&quot;:&quot;Lapin&quot;,&quot;age&quot;:37,&quot;email&quot;:&quot;E-mail3&quot;,&quot;registationDate&quot;:&quot;2022-10-12T00:00:00&quot;},{&quot;id&quot;:5,&quot;name&quot;:&quot;Katya&quot;,&quot;surname&quot;:&quot;Barinova&quot;,&quot;age&quot;:26,&quot;email&quot;:&quot;Email-5&quot;,&quot;registationDate&quot;:&quot;2022-10-13T00:00:00&quot;},{&quot;id&quot;:6,&quot;name&quot;:&quot;Ivan&quot;,&quot;surname&quot;:&quot;Ivanov&quot;,&quot;age&quot;:24,&quot;email&quot;:&quot;E-mail24&quot;,&quot;registationDate&quot;:&quot;2022-10-13T00:00:00&quot;}].
         /// </summary>
         internal static string UserServiceGetAllResult {

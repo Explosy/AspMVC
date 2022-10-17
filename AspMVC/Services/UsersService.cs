@@ -10,9 +10,11 @@ namespace AspMVC.Services {
   public class UsersService : IDataService<UserDTO> {
     private readonly ISettings settings;
     private readonly Func<IHttpClientProxy> httpClientProxy;
-    public UsersService(ISettings settings, Func<IHttpClientProxy> httpClientProxy) { 
+    private readonly Func<string,IHttpContentProxy> httpContentProxy;
+    public UsersService(ISettings settings, Func<IHttpClientProxy> httpClientProxy, Func<string, IHttpContentProxy> httpContentProxy) { 
       this.settings = settings;
       this.httpClientProxy = httpClientProxy;
+      this.httpContentProxy = httpContentProxy;
     }
     public async Task<IEnumerable<UserDTO>> GetAllItems() {
       using (IHttpClientProxy client = httpClientProxy()) {
@@ -38,7 +40,8 @@ namespace AspMVC.Services {
     public async Task<bool> CreateItem(UserDTO userDTO) {
       using (IHttpClientProxy client = httpClientProxy()) {
         string json = JsonConvert.SerializeObject(userDTO);
-        using HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+        using IHttpContentProxy content = httpContentProxy(json);
+        //using HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
         using HttpResponseMessage response = await client.PostAsync(settings.ApiAddress, content).ConfigureAwait(false);
         if (response.IsSuccessStatusCode) {
           return true;
@@ -49,7 +52,7 @@ namespace AspMVC.Services {
     public async Task<bool> UpdateItem(UserDTO userDTO) {
       using (IHttpClientProxy client = httpClientProxy()) {
         string json = JsonConvert.SerializeObject(userDTO);
-        using HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+        using IHttpContentProxy content = httpContentProxy(json);
         using HttpResponseMessage response = await client.PutAsync($"{settings.ApiAddress}{userDTO.Id}", content).ConfigureAwait(false);
         if (response.IsSuccessStatusCode) {
           return true;

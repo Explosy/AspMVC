@@ -10,11 +10,11 @@ namespace AspMVC {
     public Task<HttpResponseMessage> GetAsync(string requestUri) {
       return httpClient.GetAsync(requestUri);
     }
-    public Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content) {
-      return httpClient.PostAsync(requestUri, content);
+    public Task<HttpResponseMessage> PostAsync(string requestUri, IHttpContentProxy content) {
+      return httpClient.PostAsync(requestUri, content.Content);
     }
-    public Task<HttpResponseMessage> PutAsync(string requestUri, HttpContent content) {
-      return httpClient.PutAsync(requestUri, content);
+    public Task<HttpResponseMessage> PutAsync(string requestUri, IHttpContentProxy content) {
+      return httpClient.PutAsync(requestUri, content.Content);
     }
     public Task<HttpResponseMessage> DeleteAsync(string requestUri) {
       return httpClient.DeleteAsync(requestUri);
@@ -22,7 +22,5 @@ namespace AspMVC {
     public void Dispose() {
       httpClient.Dispose();
     }
-
-    
   }
 }
