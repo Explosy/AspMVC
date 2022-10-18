@@ -1,14 +1,5 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import UsersPage from './components/UsersPage.vue';
+import Router from './Router'
 
-const routes = [
-	{ path: '/', component: UsersPage }
-  ]
-  
-// const router = VueRouter.createRouter({
-// 	history: VueRouter.createWebHashHistory(),
-// 	routes, // short for `routes: routes`
-//   })
-
-createApp(App).mount('#app')
+createApp(App).use(Router).mount('#app')

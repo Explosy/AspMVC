@@ -1,18 +1,20 @@
 <template>
   <HeaderBlock/>
-  <UsersPage/>
+  <router-view/>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import HeaderBlock from './components/HeaderBlock.vue';
-import UsersPage from './components/UsersPage.vue';
+//import UsersPage from './views/UsersPage.vue';
+//import CreatePage from './components/CreatePage.vue';
+
+
 
 export default defineComponent({
   name: 'App',
   components: {
     HeaderBlock,
-    UsersPage
   }
 });
 </script>
