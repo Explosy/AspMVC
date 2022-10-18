@@ -1,15 +1,17 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <UsersPage msg="Welcome to Your Vue.js + TypeScript App"/>
+  <HeaderBlock/>
+  <UsersPage/>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import HeaderBlock from './components/HeaderBlock.vue';
 import UsersPage from './components/UsersPage.vue';
 
 export default defineComponent({
   name: 'App',
   components: {
+    HeaderBlock,
     UsersPage
   }
 });

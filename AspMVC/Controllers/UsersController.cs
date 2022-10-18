@@ -1,4 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using AspMVC.Models;
 using AspMVC.Services;
 using DTO;
 using Microsoft.AspNetCore.Mvc;
@@ -11,18 +15,22 @@ namespace AspMVCProject.Controllers {
     }
 
     public async Task<IActionResult> Index(string email) {
-      return View(await usersService.FindItemsByProperty(email));
+      ResponseModel<IEnumerable<UserDTO>> response = await usersService.GetItems(email);
+      if (!response.IsSuccess) {
+        return View("ServerError", response);
+      }
+      return View(response.Data);
     }
 
     public async Task<IActionResult> Details(int? id) {
       if (id == null) {
         return NotFound();
       }
-      UserDTO user = await usersService.GetItemById((int)id);
-      if (user == null) {
-        return NotFound();
+      ResponseModel<UserDTO> response = await usersService.GetItemById((int)id);
+      if (!response.IsSuccess) {
+        return View("ServerError", response);
       }
-      return View(user);
+      return View(response.Data);
     }
 
     public IActionResult Create() {
@@ -33,13 +41,12 @@ namespace AspMVCProject.Controllers {
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("Id,Name,Surname,Age,Email,RegistationDate")] UserDTO user) {
       if (ModelState.IsValid) {
-        bool result = await usersService.CreateItem(user);
-        if (result) {
+        ResponseModel<UserDTO> response = await usersService.CreateItem(user);
+        if (response.IsSuccess) {
           ViewBag.Message = "добавлен";
           return View("Success");
         }
-        ViewBag.Message = "Добавление";
-        return View("Failure");
+        return View("ErrorServer", response);
       }
       return View(user);
     }
@@ -48,11 +55,11 @@ namespace AspMVCProject.Controllers {
       if (id == null) {
         return NotFound();
       }
-      UserDTO user = await usersService.GetItemById((int)id);
-      if (user == null) {
-        return NotFound();
+      ResponseModel<UserDTO> response = await usersService.GetItemById((int)id);
+      if (response.IsSuccess) {
+        return View(response.Data);
       }
-      return View(user);
+      return View("ServerError", response);
     }
 
     [HttpPost]
@@ -62,13 +69,12 @@ namespace AspMVCProject.Controllers {
         return NotFound();
       }
       if (ModelState.IsValid) {
-        bool result = await usersService.UpdateItem(user);
-        if (result) {
+        ResponseModel<UserDTO> response = await usersService.UpdateItem(user);
+        if (response.IsSuccess) {
           ViewBag.Message = "изменен";
           return View("Success");
         }
-        ViewBag.Message = "Изменение";
-        return View("Failure");
+        return View("ServerError", response);
       }
       return View(user);
     }
@@ -77,23 +83,22 @@ namespace AspMVCProject.Controllers {
       if (id == null) {
         return NotFound();
       }
-      UserDTO user = await usersService.GetItemById((int)id);
-      if (user == null) {
-        return NotFound();
+      ResponseModel<UserDTO> response = await usersService.GetItemById((int)id);
+      if (!response.IsSuccess) {
+        return View(response.Data);
       }
-      return View(user);
+      return View("ServerError", response);
     }
 
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id) {
-      bool result = await usersService.DeleteItem(id);
-      if (result) {
+      ResponseModel<UserDTO> response = await usersService.DeleteItem(id);
+      if (response.IsSuccess) {
         ViewBag.Message = "удален";
         return View("Success");
       }
-      ViewBag.Message = "Удаление";
-      return View("Failure");
+      return View("ServerError", response);
     }
   }
 }

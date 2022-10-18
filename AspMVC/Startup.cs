@@ -27,7 +27,7 @@ namespace AspMVC {
       if (env.IsDevelopment()) {
         app.UseDeveloperExceptionPage();
       } else {
-        app.UseExceptionHandler("/Home/Error");
+        app.UseExceptionHandler("/Error");
         app.UseHsts();
       }
       app.UseHttpsRedirection();

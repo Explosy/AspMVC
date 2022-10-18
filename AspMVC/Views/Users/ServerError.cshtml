@@ -1,0 +1,14 @@
+﻿@model ResponseModel
+@{
+    ViewData["Title"] = "Error";
+}
+<h1>На сервере произошла ошибка</h1>
+<hr />
+<div class="text-danger">
+    <p>
+        @Model.Error 
+    </p>
+    <p>
+        @Model.StackTrace
+    </p>
+</div>

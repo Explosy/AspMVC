@@ -1,4 +1,5 @@
-﻿using DTO;
+﻿using AspMVC.Models;
+using DTO;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -15,56 +16,44 @@ namespace AspMVC.Services {
       this.httpClientProxy = httpClientProxy;
       this.httpContentProxy = httpContentProxy;
     }
-    public async Task<IEnumerable<UserDTO>> GetAllItems() {
-      using (IHttpClientProxy client = httpClientProxy()) {
-        using HttpResponseMessage response = await client.GetAsync(settings.ApiAddress).ConfigureAwait(false);
-        string content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-        return JsonConvert.DeserializeObject<IEnumerable<UserDTO>>(content);
-      }
-    }
-    public async Task<IEnumerable<UserDTO>> FindItemsByProperty(string email) {
+
+    public async Task<ResponseModel<IEnumerable<UserDTO>>> GetItems(string email) {
       using (IHttpClientProxy client = httpClientProxy()) {
         using HttpResponseMessage response = await client.GetAsync($"{settings.ApiAddress}?Email={email}").ConfigureAwait(false);
         string content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-        return JsonConvert.DeserializeObject<IEnumerable<UserDTO>>(content);
+        return JsonConvert.DeserializeObject<ResponseModel<IEnumerable<UserDTO>>>(content);
       }
     }
-    public async Task<UserDTO> GetItemById(int id) {
+    public async Task<ResponseModel<UserDTO>> GetItemById(int id) {
       using (IHttpClientProxy client = httpClientProxy()) {
         using HttpResponseMessage response = await client.GetAsync($"{settings.ApiAddress}{id}").ConfigureAwait(false);
         string content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-        return JsonConvert.DeserializeObject<UserDTO>(content);
+        return JsonConvert.DeserializeObject< ResponseModel<UserDTO>>(content);
       }
     }
-    public async Task<bool> CreateItem(UserDTO userDTO) {
+    public async Task<ResponseModel<UserDTO>> CreateItem(UserDTO userDTO) {
       using (IHttpClientProxy client = httpClientProxy()) {
         string json = JsonConvert.SerializeObject(userDTO);
         using IHttpContentProxy content = httpContentProxy(json);
         using HttpResponseMessage response = await client.PostAsync(settings.ApiAddress, content).ConfigureAwait(false);
-        if (response.IsSuccessStatusCode) {
-          return true;
-        }
-        return false;
+        string res_content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        return JsonConvert.DeserializeObject<ResponseModel<UserDTO>>(res_content);
       }
     }
-    public async Task<bool> UpdateItem(UserDTO userDTO) {
+    public async Task<ResponseModel<UserDTO>> UpdateItem(UserDTO userDTO) {
       using (IHttpClientProxy client = httpClientProxy()) {
         string json = JsonConvert.SerializeObject(userDTO);
         using IHttpContentProxy content = httpContentProxy(json);
         using HttpResponseMessage response = await client.PutAsync($"{settings.ApiAddress}{userDTO.Id}", content).ConfigureAwait(false);
-        if (response.IsSuccessStatusCode) {
-          return true;
-        }
-        return false;
+        string res_content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        return JsonConvert.DeserializeObject<ResponseModel<UserDTO>>(res_content);
       }
     }
-    public async Task<bool> DeleteItem(int id) {
+    public async Task<ResponseModel<UserDTO>> DeleteItem(int id) {
       using (IHttpClientProxy client = httpClientProxy()) {
         using HttpResponseMessage response = await client.DeleteAsync($"{settings.ApiAddress}{id}").ConfigureAwait(false);
-        if (response.IsSuccessStatusCode) {
-          return true;
-        }
-        return false;
+        string res_content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        return JsonConvert.DeserializeObject<ResponseModel<UserDTO>>(res_content);
       }
     }
   }

@@ -1,3 +1,4 @@
+using AspAPI.Handlers;
 using DataLayer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,6 +25,8 @@ namespace AspAPI {
       if (env.IsDevelopment()) {
         app.UseDeveloperExceptionPage();
       }
+
+      app.UseMiddleware<ExceptionHandlerMiddleware>();
 
       app.UseHttpsRedirection();
 

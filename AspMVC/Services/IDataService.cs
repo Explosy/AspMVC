@@ -1,14 +1,13 @@
-﻿using DTO;
+﻿using AspMVC.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace AspMVC.Services {
-  interface IDataService<T> {
-    Task<IEnumerable<T>> GetAllItems();
-    Task<T> GetItemById(int id);
-    Task<IEnumerable<T>> FindItemsByProperty(string email);
-    Task<bool> CreateItem(T item);
-    Task<bool> UpdateItem(T item);
-    Task<bool> DeleteItem(int id);
+  interface IDataService<T> where T : class {
+    Task<ResponseModel<IEnumerable<T>>> GetItems(string email);
+    Task<ResponseModel<T>> GetItemById(int id);
+    Task<ResponseModel<T>> CreateItem(T item);
+    Task<ResponseModel<T>> UpdateItem(T item);
+    Task<ResponseModel<T>> DeleteItem(int id);
   }
 }

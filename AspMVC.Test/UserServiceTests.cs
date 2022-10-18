@@ -84,7 +84,7 @@ namespace AspMVC.Test {
           return task;
         });
       
-      IEnumerable<UserDTO> users = usersService.FindItemsByProperty(email).GetAwaiter().GetResult();
+      IEnumerable<UserDTO> users = usersService.GetItems(email).GetAwaiter().GetResult();
       
       Assert.True(testUser.Equals(users.First()));
     }
