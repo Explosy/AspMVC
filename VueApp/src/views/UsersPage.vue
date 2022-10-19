@@ -84,6 +84,7 @@
                 fetch('users?Email='+ this.searchText)
                     .then(r => r.json())
                     .then(json => {
+                        console.log(json);
                         this.users = json.data as Users;
                         this.loading = false;
                     });
