@@ -10,6 +10,16 @@ const routes = [
     path: '/create',
     name: 'Create',
     component: () => import('./views/CreateUserPage.vue')
+  },
+  {
+    path: '/details/:id',
+    name: 'Details',
+    component: () => import('./views/DetailsPage.vue')
+  },
+  {
+    path: '/edit/:id',
+    name: 'Edit',
+    component: () => import('./views/EditUserPage.vue')
   }
 ]
 const router = createRouter({

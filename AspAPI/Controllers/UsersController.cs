@@ -47,38 +47,39 @@ namespace AspAPI.Controllers {
     }
 
     [HttpPost]
-    public async Task<ResponseModel<User>> Post(User user) {
-      if (user == null) {
+    public async Task<ResponseModel<User>> Post(ResponseModel<User> request) {
+      if (request.Data == null) {
         return new ResponseModel<User>() {
           IsSuccess = false,
-          Error = "Переданный пользователь - NULL"
+          Error = "Переданный пользователь - NULL",
+          Data = request.Data
         };
       }
-      dBContext.Users.Add(user);
+      dBContext.Users.Add(request.Data);
       await dBContext.SaveChangesAsync();
       return new ResponseModel<User>() {
-        Data = user
+        Data = request.Data
       };
     }
 
     [HttpPut("{id}")]
-    public async Task<ResponseModel<User>> Put(User user) {
-      if (user == null) {
+    public async Task<ResponseModel<User>> Put(ResponseModel<User> request) {
+      if (request.Data == null) {
         return new ResponseModel<User>() {
           IsSuccess = false,
           Error = "Переданный пользователь - NULL"
         };
       }
-      if (!dBContext.Users.Any(x => x.Id == user.Id)) {
+      if (!dBContext.Users.Any(x => x.Id == request.Data.Id)) {
         return new ResponseModel<User>() {
           IsSuccess = false,
           Error = "Пользователь с указанным id не найден"
         };
       }
-      dBContext.Update(user);
+      dBContext.Update(request.Data);
       await dBContext.SaveChangesAsync();
       return new ResponseModel<User>() {
-        Data = user
+        Data = request.Data
       };
     }
 

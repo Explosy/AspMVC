@@ -84,7 +84,7 @@ namespace AspMVCProject.Controllers {
         return NotFound();
       }
       ResponseModel<UserDTO> response = await usersService.GetItemById((int)id);
-      if (!response.IsSuccess) {
+      if (response.IsSuccess) {
         return View(response.Data);
       }
       return View("ServerError", response);

@@ -1,6 +1,7 @@
 <template>
+	<h1>Редактирование</h1>
 	<div>
-		<h1>Создание нового пользователя</h1>
+		<h4>Пользователь</h4>
 		<hr />
 		<div class="row">
 			<div class="col-md-3">
@@ -22,52 +23,57 @@
 				</div>
 				<br/>
 				<div class="form-group">
-					<button class="btn btn-success" @click="createUser">Создать</button>
+					<button class="btn btn-success" @click="EditUser">Обновить</button>
 				</div>
 			</div>
 		</div>
 		<div>
 			<button class="btn btn-secondary" @click="$router.push('/')">Вернутся назад</button>
-		</div>	
+		</div>
 	</div>
 </template>
 
 <script lang="ts">
     import { defineComponent } from 'vue';
 	import config from '@/appconfig';
-	import { post } from '@/services/ApiService';
-    import { ResponseModel } from '@/models/ResponseModel';
-    import { User } from '@/models/User';
-
+	import { get, put } from '@/services/ApiService';
+	import { ResponseModel } from '@/models/ResponseModel';
+	import { User } from '@/models/User';
+    
     interface Data {
-		user : User
+        user : User
     }
 
     export default defineComponent({
-        name: 'CreateUserPage',
+        name: 'EditUserPage',
 
         data(): Data {
             return {
-				user : new User()
+                user : new User()
             };
         },
 		created() {
-			
+			this.GetUser()
 		},
         methods: {
-			createUser() : void {
+			async GetUser () : Promise<void>  {
+				get<ResponseModel>(`${config.API_URL}/${this.$route.params.id}`)
+					.then (response => {
+						this.user = response.data as User;
+				});
+			},
+			EditUser () : void {
 				const response : ResponseModel = {
-					error : "",
-					stackTrace : "",
+					error : null,
+					stackTrace : null,
 					isSuccess : true,
-					data : this.user
-					}
-				post<ResponseModel, ResponseModel>(config.API_URL, response)
+					data : this.user 
+				}
+				put<ResponseModel, ResponseModel>(`${config.API_URL}/${this.$route.params.id}`, response)
 					.then(response => {
-						console.log(response);
-				})
-				this.user = new User();
+						this.user = response.data as User;
+					})
 			}
-		}
+        }
     });
 </script>

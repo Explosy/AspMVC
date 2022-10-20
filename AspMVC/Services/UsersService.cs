@@ -32,8 +32,11 @@ namespace AspMVC.Services {
       }
     }
     public async Task<ResponseModel<UserDTO>> CreateItem(UserDTO userDTO) {
+      ResponseModel<UserDTO> model = new ResponseModel<UserDTO>() {
+        Data = userDTO
+      };
       using (IHttpClientProxy client = httpClientProxy()) {
-        string json = JsonConvert.SerializeObject(userDTO);
+        string json = JsonConvert.SerializeObject(model);
         using IHttpContentProxy content = httpContentProxy(json);
         using HttpResponseMessage response = await client.PostAsync(settings.ApiAddress, content).ConfigureAwait(false);
         string res_content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -41,8 +44,11 @@ namespace AspMVC.Services {
       }
     }
     public async Task<ResponseModel<UserDTO>> UpdateItem(UserDTO userDTO) {
+      ResponseModel<UserDTO> model = new ResponseModel<UserDTO>() {
+        Data = userDTO
+      };
       using (IHttpClientProxy client = httpClientProxy()) {
-        string json = JsonConvert.SerializeObject(userDTO);
+        string json = JsonConvert.SerializeObject(model);
         using IHttpContentProxy content = httpContentProxy(json);
         using HttpResponseMessage response = await client.PutAsync($"{settings.ApiAddress}{userDTO.Id}", content).ConfigureAwait(false);
         string res_content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
